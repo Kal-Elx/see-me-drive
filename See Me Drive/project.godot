@@ -16,8 +16,12 @@ _global_script_class_icons={
 [application]
 
 config/name="See Me Drive"
-run/main_scene="res://Game.tscn"
+run/main_scene="res://scenes/Game.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+Global="*res://scripts/global.gd"
 
 [display]
 
