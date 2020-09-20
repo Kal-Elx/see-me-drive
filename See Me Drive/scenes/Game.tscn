@@ -6,13 +6,16 @@
 [node name="Game" type="Node"]
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 206.854, 741.823 )
+position = Vector2( 270.323, 462.169 )
 scale = Vector2( 0.5, 0.5 )
+speed = 500
+vertical_speed_preserved_in_turn = 0.5
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
-offset = Vector2( 0, -250 )
+offset = Vector2( 0, -300 )
 current = true
 limit_left = 0
 limit_right = 480
+smoothing_speed = 1.0
 
 [node name="Road" parent="." instance=ExtResource( 2 )]
