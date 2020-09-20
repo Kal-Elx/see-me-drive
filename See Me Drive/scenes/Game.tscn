@@ -1,9 +1,18 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://scenes/Road.tscn" type="PackedScene" id=2]
 
 [node name="Game" type="Node"]
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 232.566, 744.544 )
+position = Vector2( 206.854, 741.823 )
 scale = Vector2( 0.5, 0.5 )
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+offset = Vector2( 0, -250 )
+current = true
+limit_left = 0
+limit_right = 480
+
+[node name="Road" parent="." instance=ExtResource( 2 )]
