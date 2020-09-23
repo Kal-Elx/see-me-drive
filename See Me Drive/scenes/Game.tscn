@@ -1,14 +1,14 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/Road.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/Car.tscn" type="PackedScene" id=3]
 
 [node name="Game" type="Node"]
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 position = Vector2( 270.323, 462.169 )
 scale = Vector2( 0.5, 0.5 )
-speed = 500
 vertical_speed_preserved_in_turn = 0.5
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
@@ -19,3 +19,9 @@ limit_right = 480
 smoothing_speed = 1.0
 
 [node name="Road" parent="." instance=ExtResource( 2 )]
+
+[node name="Car" parent="." groups=[
+"obstacles",
+] instance=ExtResource( 3 )]
+position = Vector2( 207.203, -50.5373 )
+linear_velocity = Vector2( 0, -100 )

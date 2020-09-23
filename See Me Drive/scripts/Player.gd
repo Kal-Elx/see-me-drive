@@ -1,35 +1,44 @@
 extends KinematicBody2D
 
-export var speed = 300;
-export var handling = 4; # Factor for how fast the car can turn.
+export var max_speed = 300;
+export var acceleration = 50;
+export var handling = 1.0/50; # Factor for how fast the car can turn.
 export var drive_towards_hold_pos = true
 export var vertical_speed_preserved_in_turn = 0.0 # float 0-1. 
 
-var direction = Vector2()
-var velocity = Vector2()
+var direction = Vector2.UP
+var velocity = Vector2.UP
+var speed = 0;
 var min_touch_from_car = ProjectSettings.get_setting("display/window/size/width") / 4
 var touching = false # If the user is touching the screen.
 var touch_pos = Vector2() # Where the user is touching the screen.
 
+
 func _ready():
 	_drive_straight()
+	print(rotation)
 
 
 func _process(delta):
+	print(speed, " ", velocity.length())
 	if touching:
+		# Accelerate to max speed.
+		speed = min(max_speed, speed + acceleration * delta)
+		
+		# Steer player.
 		_steer(touch_pos)
 		if (drive_towards_hold_pos):
 			touch_pos.y -= speed * delta
 
 
 func _physics_process(delta):
-	# Rotate player
+	# Rotate player.
 	rotation = Global.fromYAxis(velocity.angle())
 	
-	# Calculate new velocity
-	velocity += (direction - velocity) * handling * delta
-	var motion = velocity * delta
-	move_and_collide(motion)
+	# Calculate new velocity.
+	if speed > 0:
+		velocity += (direction - velocity) * speed * handling * delta
+		move_and_collide(velocity * delta)
 
 
 func _unhandled_input(event):
@@ -59,3 +68,8 @@ func _steer(touch_pos):
 
 func _drive_straight():
 	direction = Vector2(0, -1).normalized() * speed
+
+
+func _on_collision(body):
+	if body.is_in_group('obstacles'):
+		speed *= 0.5
