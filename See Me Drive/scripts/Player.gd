@@ -16,11 +16,9 @@ var touch_pos = Vector2() # Where the user is touching the screen.
 
 func _ready():
 	_drive_straight()
-	print(rotation)
 
 
 func _process(delta):
-	print(speed, " ", velocity.length())
 	if touching:
 		# Accelerate to max speed.
 		speed = min(max_speed, speed + acceleration * delta)
