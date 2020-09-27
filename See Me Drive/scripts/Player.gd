@@ -8,7 +8,7 @@ export var vertical_speed_preserved_in_turn = 0.0 # float 0-1.
 
 var direction = Vector2.UP
 var velocity = Vector2.UP
-var speed = 0;
+var speed = 0
 var min_touch_from_car = ProjectSettings.get_setting("display/window/size/width") / 4
 var touching = false # If the user is touching the screen.
 var touch_pos = Vector2() # Where the user is touching the screen.

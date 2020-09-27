@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://assets/truck.png" type="Texture" id=1]
+[ext_resource path="res://scripts/Vehicle.gd" type="Script" id=2]
+
+[node name="Truck" type="RigidBody2D"]
+script = ExtResource( 2 )
+speed = 80
+break_power = 3
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+scale = Vector2( 0.7, 0.7 )
+polygon = PoolVector2Array( -45.0016, -93.3281, -37.6683, -102.205, 20.9974, -102.591, 28.3307, -94.8719, 28.7166, 5.47743, 22.5413, 5.09148, 21.3834, 18.2141, 12.5063, 18.2141, 12.5063, 33.2665, 25.243, 33.2665, 26.0149, 93.0901, 12.1204, 93.8621, 10.9625, 101.967, 5.17313, 101.967, 5.17313, 107.757, -21.458, 108.143, -22.23, 101.967, -30.3351, 101.967, -31.107, 93.0901, -43.8437, 93.0901, -44.6156, 31.3367, -29.5632, 31.7226, -29.1772, 18.986, -37.6683, 18.2141, -38.4402, 7.40723, -44.6156, 5.47743 )
+
+[node name="Sprite" type="Sprite" parent="."]
+scale = Vector2( 0.7, 0.7 )
+texture = ExtResource( 1 )
+[connection signal="body_entered" from="." to="." method="_on_collision"]
