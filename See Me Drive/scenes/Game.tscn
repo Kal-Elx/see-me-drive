@@ -2,7 +2,7 @@
 
 [ext_resource path="res://scenes/Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://scenes/Road.tscn" type="PackedScene" id=2]
-[ext_resource path="res://scenes/Truck.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/Speedometer.tscn" type="PackedScene" id=3]
 [ext_resource path="res://scripts/Game.gd" type="Script" id=4]
 
 [node name="Game" type="Node"]
@@ -22,5 +22,4 @@ smoothing_speed = 1.0
 
 [node name="Road" parent="." instance=ExtResource( 2 )]
 
-[node name="Truck" parent="." instance=ExtResource( 3 )]
-position = Vector2( 283.16, 83.9083 )
+[node name="CanvasLayer" parent="." instance=ExtResource( 3 )]

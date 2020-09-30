@@ -71,3 +71,8 @@ func _drive_straight():
 func _on_collision(body):
 	if body.is_in_group('obstacles'):
 		speed *= 0.5
+
+
+# Returns a string with the player's current speed.
+func get_speed():
+	return str(round(velocity.length()) if speed != 0 else '0')
