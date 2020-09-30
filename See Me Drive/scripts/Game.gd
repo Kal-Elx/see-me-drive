@@ -15,6 +15,7 @@ onready var taxi_scene = load("res://scenes/Taxi.tscn")
 onready var mini_truck_scene = load("res://scenes/MiniTruck.tscn")
 onready var mini_van_scene = load("res://scenes/MiniVan.tscn")
 onready var truck_scene = load("res://scenes/Truck.tscn")
+onready var ambulance_scene = load("res://scenes/Ambulance.tscn")
 	
 	
 func _ready():
@@ -32,14 +33,14 @@ func _process(delta):
 func _spawn():
 	if last_spawn_y - player.position.y > spawn_distance:
 		last_spawn_y = player.position.y
-		var lane = rng.randi_range(1, 4)
 		vehicles.append(_spawn_vehicle(rand_array([
 			[8, car_scene], 
 			[2, taxi_scene],
 			[4, mini_truck_scene],
 			[3, mini_van_scene],
 			[1, truck_scene],
-			]), lane))
+			[1, ambulance_scene],
+			])))
 
 
 # Removes passed vehicles.
@@ -50,9 +51,11 @@ func _cleanup():
 			vehicles.erase(vehicle)
 			
 
-func _spawn_vehicle(scene, lane):
+func _spawn_vehicle(scene):
 	var vehicle = scene.instance()
-	vehicle.position = Vector2(x_lanes[lane-1], player.position.y - screen_height)
+	var lane = rng.randi_range(1, 4)
+	var y = player.position.y + (screen_height/4 if vehicle.starts_behind else -screen_height)
+	vehicle.position = Vector2(x_lanes[lane-1], y)
 	vehicle.linear_velocity *= rng.randf_range(0.85, 1.15)
 	add_child(vehicle)
 	return vehicle
