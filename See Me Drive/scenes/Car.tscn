@@ -6,7 +6,9 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 22.1398, 51.646 )
 
-[node name="Car" type="RigidBody2D"]
+[node name="Car" type="RigidBody2D" groups=[
+"obstacles",
+]]
 gravity_scale = 0.0
 contacts_reported = 1
 contact_monitor = true

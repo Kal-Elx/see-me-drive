@@ -1,8 +1,9 @@
 extends KinematicBody2D
 
-export var max_speed = 300;
-export var acceleration = 50;
-export var handling = 1.0/50; # Factor for how fast the car can turn.
+export var max_speed = 300.0
+export var acceleration = 50
+export var max_speed_acceleration = 2 # Pixels per second
+export var handling = 1.0/50 # Factor for how fast the car can turn.
 export var drive_towards_hold_pos = true
 export var vertical_speed_preserved_in_turn = 0.0 # float 0-1. 
 
@@ -27,6 +28,8 @@ func _process(delta):
 		_steer(touch_pos)
 		if (drive_towards_hold_pos):
 			touch_pos.y -= speed * delta
+			
+		_update_max_speed(delta)
 
 
 func _physics_process(delta):
@@ -71,7 +74,13 @@ func _drive_straight():
 func _on_collision(body):
 	if body.is_in_group('obstacles'):
 		speed *= 0.5
+		max_speed *= 0.8
 
+
+func _update_max_speed(delta):
+	if speed >= floor(max_speed):
+		max_speed += delta * max_speed_acceleration
+	
 
 # Returns a string with the player's current speed.
 func get_speed():
