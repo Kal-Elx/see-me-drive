@@ -3,11 +3,15 @@ extends RigidBody2D
 export var speed = 100
 export var break_power = 2
 export var starts_behind = false
+export var wrong_direction = false
 
 func _ready():
 	if (starts_behind):
 		var player = get_node("/root/Game/Player")
 		linear_velocity = Vector2(0, -(player.speed + speed))
+	elif wrong_direction:
+		linear_velocity = Vector2(0, speed)
+		rotation = PI
 	else:
 		linear_velocity = Vector2(0, -speed)
 	gravity_scale = 0

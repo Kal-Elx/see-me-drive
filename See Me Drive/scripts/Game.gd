@@ -16,6 +16,7 @@ onready var mini_truck_scene = load("res://scenes/MiniTruck.tscn")
 onready var mini_van_scene = load("res://scenes/MiniVan.tscn")
 onready var truck_scene = load("res://scenes/Truck.tscn")
 onready var ambulance_scene = load("res://scenes/Ambulance.tscn")
+onready var viper_scene = load("res://scenes/Viper.tscn")
 	
 	
 func _ready():
@@ -40,6 +41,7 @@ func _spawn():
 			[3, mini_van_scene],
 			[1, truck_scene],
 			[1, ambulance_scene],
+			[1, viper_scene],
 			])))
 
 
