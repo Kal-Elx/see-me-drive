@@ -10,3 +10,6 @@ data_*/
 
 # macOS
 .DS_Store
+
+# Android
+*.apk
