@@ -14,6 +14,8 @@ var min_touch_from_car = ProjectSettings.get_setting("display/window/size/width"
 var touching = false # If the user is touching the screen.
 var touch_pos = Vector2() # Where the user is touching the screen.
 
+onready var init_max_speed = max_speed
+
 
 func _ready():
 	_drive_straight()
@@ -75,6 +77,9 @@ func _on_collision(body):
 	if body.is_in_group('obstacles'):
 		speed *= 0.5
 		max_speed *= 0.8
+		
+		# Max acceeleration should never drop below the initialized max speed.
+		max_speed = max(max_speed, init_max_speed)
 
 
 func _update_max_speed(delta):
