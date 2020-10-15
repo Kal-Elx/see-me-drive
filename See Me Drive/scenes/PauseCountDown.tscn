@@ -1,0 +1,55 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://styles/light.tres" type="StyleBox" id=1]
+[ext_resource path="res://scripts/PauseCountDown.gd" type="Script" id=2]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.196078, 0.196078, 0.196078, 0.784314 )
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="PauseCountDown" type="Control"]
+margin_right = 40.0
+margin_bottom = 40.0
+mouse_filter = 2
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Left" type="Panel" parent="."]
+margin_left = 205.0
+margin_top = 304.0
+margin_right = 235.0
+margin_bottom = 424.0
+mouse_filter = 2
+custom_styles/panel = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Right" type="Panel" parent="."]
+margin_left = 245.0
+margin_top = 304.0
+margin_right = 275.0
+margin_bottom = 424.0
+mouse_filter = 2
+custom_styles/panel = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+margin_left = 140.0
+margin_top = 450.0
+margin_right = 340.0
+margin_bottom = 470.0
+mouse_filter = 2
+custom_styles/fg = SubResource( 1 )
+custom_styles/bg = ExtResource( 1 )
+percent_visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
