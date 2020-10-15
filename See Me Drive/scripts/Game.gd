@@ -1,6 +1,7 @@
 extends Node
 
 export var spawn_distance = 400
+export var blur_factor = 0.2
 
 const x_lanes = [140, 208, 280, 358]
 
@@ -10,6 +11,7 @@ var vehicles = []
 var screen_height = ProjectSettings.get_setting("display/window/size/height")
 
 onready var player = find_node("Player")
+onready var background = find_node("Road").get_child(0).get_child(0).get_child(0).material
 onready var car_scene = load("res://scenes/Car.tscn")
 onready var taxi_scene = load("res://scenes/Taxi.tscn")
 onready var mini_truck_scene = load("res://scenes/MiniTruck.tscn")
@@ -28,6 +30,7 @@ func _process(delta):
 	# TODO: Possible optimization, call this with a time interval.
 	_spawn()
 	_cleanup()
+	_apply_motion_blur()
 	
 	
 # Spawns new vehicles.
@@ -51,6 +54,13 @@ func _cleanup():
 		if vehicle.position.y > player.position.y + screen_height:
 			remove_child(vehicle)
 			vehicles.erase(vehicle)
+			
+
+# Applies motion blur to the background based on the player's speed.
+func _apply_motion_blur():
+	background.set_shader_param("strength", 
+								player.get_speed() * blur_factor * 0.001)
+	print(background.get_shader_param("strength"))
 			
 
 func _spawn_vehicle(scene):

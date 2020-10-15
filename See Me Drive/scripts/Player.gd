@@ -88,5 +88,8 @@ func _update_max_speed(delta):
 	
 
 # Returns a string with the player's current speed.
-func get_speed():
+func read_speedometer():
 	return str(round(abs(velocity.y)) if speed != 0 else '0')
+	
+func get_speed():
+	return abs(velocity.y) if speed != 0 else 0
