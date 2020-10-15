@@ -12,6 +12,7 @@ var screen_height = ProjectSettings.get_setting("display/window/size/height")
 
 onready var player = find_node("Player")
 onready var background = find_node("Road").get_child(0).get_child(0).get_child(0).material
+onready var camera = find_node("Camera2D")
 onready var car_scene = load("res://scenes/Car.tscn")
 onready var taxi_scene = load("res://scenes/Taxi.tscn")
 onready var mini_truck_scene = load("res://scenes/MiniTruck.tscn")
@@ -58,15 +59,15 @@ func _cleanup():
 
 # Applies motion blur to the background based on the player's speed.
 func _apply_motion_blur():
-	background.set_shader_param("strength", 
-								player.get_speed() * blur_factor * 0.001)
-	print(background.get_shader_param("strength"))
+	var strength = player.get_speed() * blur_factor * 0.001
+	background.set_shader_param("strength", strength)
 			
 
 func _spawn_vehicle(scene):
 	var vehicle = scene.instance()
 	var lane = rng.randi_range(1, 4)
-	var y = player.position.y + (screen_height/4 if vehicle.starts_behind else -screen_height)
+	var y = player.position.y + (screen_height/2 + camera.offset.y + 75 
+		if vehicle.starts_behind else -screen_height)
 	vehicle.position = Vector2(x_lanes[lane-1], y)
 	vehicle.linear_velocity *= rng.randf_range(0.85, 1.15)
 	add_child(vehicle)

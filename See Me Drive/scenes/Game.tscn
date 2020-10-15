@@ -15,7 +15,7 @@ max_speed = 300.0
 vertical_speed_preserved_in_turn = 0.5
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
-offset = Vector2( 0, -300 )
+offset = Vector2( 0, -150 )
 current = true
 limit_left = 0
 limit_right = 480
