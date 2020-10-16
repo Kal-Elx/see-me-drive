@@ -6,7 +6,8 @@ export var max_pause_outline = 8.0
 export var min_pause_outline = 2.0
 export var outline_speed = 12
 
-onready var player_sprite = get_owner().find_node("Player").get_child(1)
+onready var player = get_owner().find_node("Player")
+onready var player_sprite = player.get_child(1)
 onready var count_down = load("res://scenes/PauseCountDown.tscn").instance()
 
 var touching = false
@@ -41,6 +42,10 @@ func _process(delta):
 func _unhandled_input(event):
 	if event is InputEventScreenDrag or event is InputEventScreenTouch and event.is_pressed():
 		touching = true
+		if paused:
+			print("setting touch pos")
+			player.touching = true
+			player.touch_pos = event.position
 
 	# If user released screen.
 	if event is InputEventScreenTouch and !event.is_pressed():
