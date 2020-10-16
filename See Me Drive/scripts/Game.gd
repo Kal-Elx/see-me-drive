@@ -1,7 +1,7 @@
 extends Node
 
 export var spawn_distance = 400
-export var blur_factor = 0.2
+export var blur_factor = 0.3
 
 const x_lanes = [140, 208, 280, 358]
 
@@ -27,7 +27,6 @@ func _ready():
 	
 
 func _process(delta):
-	# TODO: Possible optimization, call this with a time interval.
 	_spawn()
 	_apply_motion_blur()
 	
