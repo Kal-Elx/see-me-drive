@@ -47,7 +47,7 @@ func _process(delta):
 		
 		# Steer player.
 		_steer(touch_pos)
-		if (drive_towards_hold_pos):
+		if drive_towards_hold_pos:
 			touch_pos.y -= speed * delta
 			
 		_update_max_speed(delta)
