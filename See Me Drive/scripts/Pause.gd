@@ -16,7 +16,11 @@ var counting_down = false
 var curr_pause_outline = min_pause_outline
 var outline_dir = 1
 
-	
+
+func _ready():
+	_set_pause_highlight_color()
+
+
 func _process(delta):
 	if touching:
 		time_since_touched = 0
@@ -54,6 +58,7 @@ func _pause():
 	get_tree().paused = true
 	paused = true
 	_hide_pause_count_down()
+	_set_pause_highlight_color()
 	
 
 func _show_pause_count_down():
@@ -77,3 +82,7 @@ func _highlight_player(delta):
 func _stop_highlighting_player():
 	player_sprite.material.set_shader_param("outline_width", 0.0)
 	curr_pause_outline = min_pause_outline
+	
+	
+func _set_pause_highlight_color():
+	player_sprite.material.set_shader_param("outline_color", Color.lightsteelblue)

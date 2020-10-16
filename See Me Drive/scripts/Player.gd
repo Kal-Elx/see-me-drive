@@ -6,6 +6,8 @@ export var max_speed_acceleration = 2 # Pixels per second
 export var handling = 1.0/50 # Factor for how fast the car can turn.
 export var drive_towards_hold_pos = true
 export var vertical_speed_preserved_in_turn = 0.0 # float 0-1. 
+export var max_damage_outline = 4.0 # Width of damage outline
+export var outline_speed = 20 # Speed of outline
 
 var direction = Vector2.UP
 var velocity = Vector2.UP
@@ -13,13 +15,17 @@ var speed = 0
 var min_touch_from_car = ProjectSettings.get_setting("display/window/size/width") / 4
 var touching = false # If the user is touching the screen.
 var touch_pos = Vector2() # Where the user is touching the screen.
+var curr_damage_outline = 0
+var outline_dir = 1
+var taking_damage = false
 
 onready var init_max_speed = max_speed
+onready var player_sprite = get_child(1)
 
 
 func _ready():
 	_drive_straight()
-
+	
 
 func _process(delta):
 	if touching:
@@ -32,6 +38,9 @@ func _process(delta):
 			touch_pos.y -= speed * delta
 			
 		_update_max_speed(delta)
+	
+	if taking_damage:
+		_damage_highlight(delta)
 
 
 func _physics_process(delta):
@@ -81,18 +90,40 @@ func _on_collision(body):
 		# Max acceeleration should never drop below the initialized max speed.
 		max_speed = max(max_speed, init_max_speed)
 		
-		# Vibrate phone
+		# Indicate damage with vibration and highlight
 		Input.vibrate_handheld(200)
+		_indicate_damage()
 
 
 func _update_max_speed(delta):
 	if speed >= floor(max_speed):
 		max_speed += delta * max_speed_acceleration
+		
+		
+func _indicate_damage():
+	player_sprite.material.set_shader_param("outline_color", Color.red)
+	taking_damage = true # Will highlight the player
+	
+
+func _stop_indicating_damage():
+	curr_damage_outline = 0
+	outline_dir = 1
+	taking_damage = false
+
+		
+func _damage_highlight(delta):
+	curr_damage_outline += delta * outline_speed * outline_dir
+	player_sprite.material.set_shader_param("outline_width", curr_damage_outline)
+	if curr_damage_outline > max_damage_outline:
+		outline_dir *= -1
+	elif curr_damage_outline <= 0:
+		_stop_indicating_damage()
 	
 
 # Returns a string with the player's current speed.
 func read_speedometer():
 	return str(round(abs(velocity.y)) if speed != 0 else '0')
+	
 	
 func get_speed():
 	return abs(velocity.y) if speed != 0 else 0
