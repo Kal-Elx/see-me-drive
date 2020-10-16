@@ -43,7 +43,6 @@ func _unhandled_input(event):
 	if event is InputEventScreenDrag or event is InputEventScreenTouch and event.is_pressed():
 		touching = true
 		if paused:
-			print("setting touch pos")
 			player.touching = true
 			player.touch_pos = event.position
 
@@ -57,6 +56,7 @@ func _resume():
 	paused = false
 	_hide_pause_count_down()
 	_stop_highlighting_player()
+	player.wake_up()
 	
 
 func _pause():
