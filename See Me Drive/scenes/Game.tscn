@@ -12,7 +12,6 @@ script = ExtResource( 4 )
 [node name="Player" parent="." instance=ExtResource( 1 )]
 position = Vector2( 270.323, 462.169 )
 scale = Vector2( 0.5, 0.5 )
-max_speed = 300.0
 vertical_speed_preserved_in_turn = 0.5
 
 [node name="Camera2D" type="Camera2D" parent="Player"]

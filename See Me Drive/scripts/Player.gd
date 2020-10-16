@@ -80,6 +80,9 @@ func _on_collision(body):
 		
 		# Max acceeleration should never drop below the initialized max speed.
 		max_speed = max(max_speed, init_max_speed)
+		
+		# Vibrate phone
+		Input.vibrate_handheld(200)
 
 
 func _update_max_speed(delta):
