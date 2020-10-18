@@ -1,12 +1,13 @@
 extends Node
 
-export var spawn_distance = 100
+export var spawn_distance = 200
+export var spawn_chance = 2 # 1 in spawn_chance that a vehicle spawns
+export var available_lanes = 2
 export var blur_factor = 0.3
 
 const x_lanes = [140, 208, 280, 358]
 
 var last_spawn_y
-var rng = RandomNumberGenerator.new()
 var screen_height = ProjectSettings.get_setting("display/window/size/height")
 var screen_top
 var screen_bottom
@@ -21,6 +22,7 @@ onready var mini_van_scene = load("res://scenes/MiniVan.tscn")
 onready var truck_scene = load("res://scenes/Truck.tscn")
 onready var ambulance_scene = load("res://scenes/Ambulance.tscn")
 onready var viper_scene = load("res://scenes/Viper.tscn")
+onready var rng = RandomNumberGenerator.new()
 	
 	
 func _ready():
@@ -37,9 +39,7 @@ func _process(delta):
 func _spawn():
 	if last_spawn_y - player.position.y > spawn_distance:
 		last_spawn_y = player.position.y
-		
-		# Spawn a third of the times spawn distance is reached.
-		if rng.randi_range(1, 3) % 3 == 0:
+		if rng.randi_range(1, spawn_chance) % spawn_chance == 0:
 			_spawn_vehicle(rand_array([
 				[8, car_scene], 
 				[2, taxi_scene],
@@ -64,7 +64,7 @@ func _spawn_vehicle(scene):
 	
 	var vehicle = scene.instance()
 	var lanes = lanes_to_place(vehicle)
-	if len(lanes) < 2: # There must always be a gap for the player.
+	if len(x_lanes) - len(lanes) >= available_lanes:
 		return
 	var lane = lanes[rng.randi_range(0, len(lanes)-1)] # Random possible lane.
 	var y = screen_bottom + 50 if vehicle.starts_behind else screen_top - 50 #
