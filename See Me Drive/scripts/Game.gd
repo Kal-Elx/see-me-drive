@@ -1,7 +1,7 @@
 extends Node
 
-export var spawn_distance = 200
-export var spawn_chance = 2 # 1 in spawn_chance that a vehicle spawns
+export var spawn_distance = 300
+export var spawn_chance = 0.7
 export var available_lanes = 2
 export var blur_factor = 0.3
 
@@ -39,7 +39,7 @@ func _process(delta):
 func _spawn():
 	if last_spawn_y - player.position.y > spawn_distance:
 		last_spawn_y = player.position.y
-		if rng.randi_range(1, spawn_chance) % spawn_chance == 0:
+		if rand_array([[spawn_chance, true], [1 - spawn_chance, false]]):
 			_spawn_vehicle(rand_array([
 				[8, car_scene], 
 				[2, taxi_scene],

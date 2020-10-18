@@ -11,6 +11,7 @@ export var drive_towards_hold_pos = true
 export var vertical_speed_preserved_in_turn = 0.0 # float 0-1. 
 export var max_damage_outline = 4.0 # Width of damage outline
 export var outline_speed = 20 # Speed of outline
+export var collision_cool_down = 1
 
 var direction = Vector2.UP
 var velocity = Vector2.UP
@@ -24,6 +25,7 @@ var taking_damage = false
 var on_road = true
 var time_since_vibrate = 0
 var reached_min_speed = 0
+var curr_collision_cool_down = 0
 
 onready var init_max_speed = max_speed
 onready var player_sprite = get_child(1)
@@ -56,6 +58,8 @@ func _process(delta):
 		_damage_highlight(delta)
 	
 	_handle_off_road(delta)
+	
+	curr_collision_cool_down = max(curr_collision_cool_down - delta, 0)
 
 
 func _physics_process(delta):
@@ -99,11 +103,12 @@ func _drive_straight():
 
 func _on_collision(body):
 	if body.is_in_group('obstacles'):
-		speed *= 0.5
-		max_speed *= 0.8
+		if curr_collision_cool_down == 0:
+			speed *= 0.5
+			max_speed *= 0.8
 		outline_dir = 1
-		
 		_indicate_damage()
+		curr_collision_cool_down = collision_cool_down # Start cool down
 
 
 func _update_max_speed(delta):
