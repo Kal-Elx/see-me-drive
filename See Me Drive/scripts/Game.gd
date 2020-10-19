@@ -2,15 +2,12 @@ extends Node
 
 export var spawn_distance = 300
 export var spawn_chance = 0.7
-export var available_lanes = 2
+export var available_lanes = 3
 export var blur_factor = 0.3
+export var expected_max_speed = 600
+export var expected_collision_interval = 30
 
 const x_lanes = [140, 208, 280, 358]
-
-var last_spawn_y
-var screen_height = ProjectSettings.get_setting("display/window/size/height")
-var screen_top
-var screen_bottom
 
 onready var player = find_node("Player")
 onready var background = find_node("Road").get_child(0).get_child(0).get_child(0).material
@@ -23,8 +20,14 @@ onready var truck_scene = load("res://scenes/Truck.tscn")
 onready var ambulance_scene = load("res://scenes/Ambulance.tscn")
 onready var viper_scene = load("res://scenes/Viper.tscn")
 onready var rng = RandomNumberGenerator.new()
-	
-	
+
+var last_spawn_y
+var screen_height = ProjectSettings.get_setting("display/window/size/height")
+var screen_top
+var screen_bottom
+var time_since_collision = 0
+
+
 func _ready():
 	rng.randomize()
 	last_spawn_y = player.position.y
@@ -33,6 +36,7 @@ func _ready():
 func _process(delta):
 	_spawn()
 	_apply_motion_blur()
+	update_difficulty(delta)
 	
 	
 # Spawns new vehicles.
@@ -98,6 +102,19 @@ func to_close(new, to, lane):
 	elif new.wrong_direction or to.wrong_direction:
 		min_dist = screen_height * 0.5
 	return abs(to.position.y - from) < min_dist
+
+
+func update_difficulty(delta):
+	spawn_chance = max(min(player.max_speed / expected_max_speed, 0.5), 1.0)
+	time_since_collision += delta
+	if time_since_collision > expected_collision_interval:
+		player.max_speed_acceleration = min(player.max_speed_acceleration + 1, 10)
+		time_since_collision = 0
+
+
+# Handles collision logic to update difficulty.
+func new_collision():
+	player.max_speed_acceleration = max(player.max_speed_acceleration - 1, 2)
 
 
 func rand_array(array):

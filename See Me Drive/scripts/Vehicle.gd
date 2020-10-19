@@ -7,16 +7,13 @@ export var wrong_direction = false
 
 onready var player = get_node("/root/Game/Player")
 
-var enter_counter = 0
-var exit_counter = 0
-var remove = false
-var time_since_remove = 0
-var time_not_on_screen = 0
 var screen_height = ProjectSettings.get_setting("display/window/size/height")
+var collided = false
+
 
 func _ready():
-	if (starts_behind):
-		linear_velocity = Vector2(0, -(player.max_speed + speed))
+	if starts_behind:
+		pass # Handled in process.
 	elif wrong_direction:
 		linear_velocity = Vector2(0, speed)
 		rotation = PI
@@ -34,6 +31,9 @@ func _process(delta):
 	if (position.y > Global.get_screen_bottom() + 100 or 
 		position.y < Global.get_screen_top() - 100):
 		queue_free()
+		
+	if starts_behind and not collided:
+		linear_velocity = Vector2(0, -(player.max_speed + speed))
 
 
 func _break():
@@ -42,3 +42,4 @@ func _break():
 
 func _on_collision(body):
 	_break()
+	collided = true

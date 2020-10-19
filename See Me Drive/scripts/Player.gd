@@ -2,8 +2,8 @@ extends KinematicBody2D
 
 export var max_speed = 300.0
 export var min_speed = 100.0
-export var acceleration = 50
-export var max_speed_acceleration = 2 # Pixels per second
+export var acceleration = 100
+export var max_speed_acceleration = 5 # Pixels per second
 export var handling = 1.0/50 # Factor for how fast the car can turn.
 export var off_road_break = -50 # Speed loss / sec off road
 export var max_speed_loss_off_road = 10 # Max speed loss / sec off road
@@ -16,6 +16,8 @@ export var collision_cool_down = 1
 var direction = Vector2.UP
 var velocity = Vector2.UP
 var speed = 0
+var init_acceleration = acceleration # Save init acceleration.
+var init_max_speed_acceleration = max_speed_acceleration # Save init.
 var min_touch_from_car = ProjectSettings.get_setting("display/window/size/width") / 4
 var touching = false # If the user is touching the screen.
 var touch_pos = Vector2() # Where the user is touching the screen.
@@ -27,6 +29,7 @@ var time_since_vibrate = 0
 var reached_min_speed = 0
 var curr_collision_cool_down = 0
 
+onready var game = get_parent()
 onready var init_max_speed = max_speed
 onready var player_sprite = get_child(1)
 onready var left_boundary = get_owner().find_node('Road').get_child(1).position.x
@@ -109,6 +112,7 @@ func _on_collision(body):
 		outline_dir = 1
 		_indicate_damage()
 		curr_collision_cool_down = collision_cool_down # Start cool down
+		game.new_collision()
 
 
 func _update_max_speed(delta):
