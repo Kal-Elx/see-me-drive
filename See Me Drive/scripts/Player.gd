@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 export var max_speed = 300.0
 export var min_speed = 100.0
-export var acceleration = 100
+export var acceleration = 50
 export var max_speed_acceleration = 5 # Pixels per second
 export var handling = 1.0/50 # Factor for how fast the car can turn.
 export var off_road_break = -50 # Speed loss / sec off road
@@ -12,6 +12,7 @@ export var vertical_speed_preserved_in_turn = 0.0 # float 0-1.
 export var max_damage_outline = 4.0 # Width of damage outline
 export var outline_speed = 20 # Speed of outline
 export var collision_cool_down = 1
+export var speed_limit = 995
 
 var direction = Vector2.UP
 var velocity = Vector2.UP
@@ -47,8 +48,8 @@ func _process(delta):
 		
 		# Accelerate to max speed.
 		var acc = acceleration if on_road else off_road_break
-		speed = max(min(max_speed, speed + acc * delta), 
-					min_speed if reached_min_speed else 0)
+		speed = min(max(min(max_speed, speed + acc * delta), 
+					min_speed if reached_min_speed else 0), speed_limit)
 		
 		# Steer player.
 		_steer(touch_pos)
@@ -160,15 +161,10 @@ func _handle_off_road(delta):
 	else:
 		on_road = true
 		time_since_vibrate = 0
-
-
-# Returns a string with the player's current speed.
-func read_speedometer():
-	return str(round(abs(velocity.y)) if speed != 0 else '0')
 	
 	
 func get_speed():
-	return abs(velocity.y) if speed != 0 else 0
+	return velocity.length() if speed != 0 else 0
 	
 
 # Called from Pause when the game is resumed.

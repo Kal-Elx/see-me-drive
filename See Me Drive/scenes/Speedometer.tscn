@@ -1,14 +1,77 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://scripts/Speedometer.gd" type="Script" id=1]
+[ext_resource path="res://addons/radial_progress/RadialProgressBar.gd" type="Script" id=1]
+[ext_resource path="res://scripts/Speedometer.gd" type="Script" id=2]
 
 [node name="Speedometer" type="CanvasLayer"]
+script = ExtResource( 2 )
 
-[node name="Label" type="Label" parent="."]
-margin_right = 40.0
-margin_bottom = 14.0
-text = "<SPEED>"
+[node name="Control" type="Control" parent="."]
+margin_top = 854.0
+margin_right = 100.0
+margin_bottom = 954.0
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+max_value = 800
+radius = 75
+thickness = 75
+bg_color = Color( 0, 0, 0, 0.588235 )
+bar_color = Color( 1, 1, 1, 0.588235 )
+
+[node name="Control2" type="Control" parent="."]
+margin_top = 854.0
+margin_right = 100.0
+margin_bottom = 954.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+max_value = 800
+radius = 75
+thickness = 75
+bg_color = Color( 0, 0, 0, 0 )
+bar_color = Color( 0.2, 0.901961, 0.2, 0.588235 )
+
+[node name="Control3" type="Control" parent="."]
+margin_top = 854.0
+margin_right = 100.0
+margin_bottom = 954.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+max_value = 800
+radius = 75
+thickness = 75
+bg_color = Color( 0, 0, 0, 0 )
+bar_color = Color( 0.960784, 0.992157, 0.0117647, 0.588235 )
+
+[node name="Control4" type="Control" parent="."]
+margin_top = 854.0
+margin_right = 100.0
+margin_bottom = 954.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+max_value = 800
+radius = 75
+thickness = 75
+bg_color = Color( 0, 0, 0, 0 )
+bar_color = Color( 0, 0.647059, 1, 0.588235 )
+
+[node name="Control5" type="Control" parent="."]
+margin_top = 854.0
+margin_right = 100.0
+margin_bottom = 954.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+max_value = 800
+radius = 75
+thickness = 75
+bg_color = Color( 0, 0, 0, 0 )
+bar_color = Color( 0.917647, 0.266667, 0.972549, 0.588235 )
