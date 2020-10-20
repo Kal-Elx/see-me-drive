@@ -171,3 +171,8 @@ func get_speed():
 func wake_up():
 	player_sprite.material.set_shader_param("outline_color", Color.red)
 	
+
+
+func _on_collected_point(area):
+	if area.is_in_group('star'):
+		area.queue_free()

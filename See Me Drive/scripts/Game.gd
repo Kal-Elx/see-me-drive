@@ -6,6 +6,7 @@ export var available_lanes = 3
 export var blur_factor = 0.3
 export var expected_max_speed = 600
 export var expected_collision_interval = 30
+export var star_spawn_distance = 1000
 
 const x_lanes = [140, 208, 280, 358]
 
@@ -19,6 +20,7 @@ onready var mini_van_scene = load("res://scenes/MiniVan.tscn")
 onready var truck_scene = load("res://scenes/Truck.tscn")
 onready var ambulance_scene = load("res://scenes/Ambulance.tscn")
 onready var viper_scene = load("res://scenes/Viper.tscn")
+onready var star_scene = load("res://scenes/Star.tscn")
 onready var rng = RandomNumberGenerator.new()
 
 var last_spawn_y
@@ -26,15 +28,19 @@ var screen_height = ProjectSettings.get_setting("display/window/size/height")
 var screen_top
 var screen_bottom
 var time_since_collision = 0
+var last_star_spawn_y
+var next_star_spawn_distance = star_spawn_distance
 
 
 func _ready():
 	rng.randomize()
 	last_spawn_y = player.position.y
+	last_star_spawn_y = player.position.y
 	
 
 func _process(delta):
 	_spawn()
+	_spawn_star()
 	_apply_motion_blur()
 	update_difficulty(delta)
 	
@@ -53,6 +59,19 @@ func _spawn():
 				[1, ambulance_scene],
 				[1, viper_scene],
 				]))
+
+
+func _spawn_star():
+	if last_star_spawn_y - player.position.y > next_star_spawn_distance:
+		last_star_spawn_y = player.position.y
+		var star = star_scene.instance()
+		var y = Global.get_screen_top() - 50
+		var x = x_lanes[rng.randi_range(0, len(x_lanes)-1)]
+		star.position = Vector2(x, y)
+		add_child(star)
+		
+		next_star_spawn_distance = rng.randi_range(
+			star_spawn_distance * 0.5, star_spawn_distance * 1.5)
 
 
 # Applies motion blur to the background based on the player's speed.
