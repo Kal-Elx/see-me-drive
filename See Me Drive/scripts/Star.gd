@@ -11,7 +11,7 @@ var outline_speed = 15
 var outline_dir = 1
 
 func _ready():
-	modulate = _speedometer.get_color(_player.get_speed())
+	modulate = _speedometer.get_color(max(_player.get_speed(), 200))
 	
 func _process(delta):
 	rotate(PI / 2 *delta)
