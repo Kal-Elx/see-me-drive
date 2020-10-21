@@ -7,6 +7,7 @@ export var blur_factor = 0.3
 export var expected_max_speed = 600
 export var expected_collision_interval = 30
 export var star_spawn_distance = 1000
+export var boost_spawn_cool_down = 10
 
 const x_lanes = [132, 203, 278, 350]
 
@@ -21,6 +22,7 @@ onready var truck_scene = load("res://scenes/Truck.tscn")
 onready var ambulance_scene = load("res://scenes/Ambulance.tscn")
 onready var viper_scene = load("res://scenes/Viper.tscn")
 onready var star_scene = load("res://scenes/Star.tscn")
+onready var boost_scene = load("res://scenes/Boost.tscn")
 onready var rng = RandomNumberGenerator.new()
 
 var last_spawn_y
@@ -30,6 +32,8 @@ var screen_bottom
 var time_since_collision = 0
 var last_star_spawn_y
 var next_star_spawn_distance = star_spawn_distance
+var curr_boost_cool_down = 0
+var saved_boost_time_left = 0
 
 
 func _ready():
@@ -41,15 +45,16 @@ func _ready():
 func _process(delta):
 	_spawn()
 	_spawn_star()
-	_apply_motion_blur()
-	update_difficulty(delta)
+	_apply_motion_blur(delta)
+	_update_difficulty(delta)
+	_boost_cool_down(delta)
 	
 	
 # Spawns new vehicles.
 func _spawn():
 	if last_spawn_y - player.position.y > spawn_distance:
 		last_spawn_y = player.position.y
-		if rand_array([[spawn_chance, true], [1 - spawn_chance, false]]):
+		if weighted_coin_flip(spawn_chance):
 			_spawn_vehicle(rand_array([
 				[8, car_scene], 
 				[2, taxi_scene],
@@ -74,9 +79,29 @@ func _spawn_star():
 			star_spawn_distance * 0.5, star_spawn_distance * 1.5)
 
 
+func _spawn_boost():
+	if player.has_boost():
+		saved_boost_time_left = player.boost_left
+	if curr_boost_cool_down == 0 and weighted_coin_flip(float(player.max_speed) / float(player.speed_limit)):
+		var boost = boost_scene.instance()
+		var y = Global.get_screen_top() - 200
+		var x = x_lanes[rng.randi_range(0, len(x_lanes)-1)]
+		boost.position = Vector2(x, y)
+		add_child(boost)
+		curr_boost_cool_down = boost_spawn_cool_down
+
+
 # Applies motion blur to the background based on the player's speed.
-func _apply_motion_blur():
-	var strength = player.get_speed() * blur_factor * 0.001
+func _apply_motion_blur(delta):
+	var boost_left = player.boost_left
+	if saved_boost_time_left > 0:
+		saved_boost_time_left -= delta
+		boost_left = saved_boost_time_left
+	else:
+		saved_boost_time_left = 0
+		
+	var boost_factor = 2 - 2 * abs(0.5 - (boost_left / player.boost_time))
+	var strength = player.get_speed() * blur_factor * 0.001 * boost_factor
 	background.set_shader_param("strength", strength)
 
 
@@ -123,7 +148,7 @@ func to_close(new, to, lane):
 	return abs(to.position.y - from) < min_dist
 
 
-func update_difficulty(delta):
+func _update_difficulty(delta):
 	spawn_chance = max(min(player.max_speed / expected_max_speed, 0.5), 1.0)
 	time_since_collision += delta
 	if time_since_collision > expected_collision_interval:
@@ -134,6 +159,11 @@ func update_difficulty(delta):
 # Handles collision logic to update difficulty.
 func new_collision():
 	player.max_speed_acceleration = max(player.max_speed_acceleration - 1, 2)
+	_spawn_boost()
+	
+
+func _boost_cool_down(delta):
+	curr_boost_cool_down = max(curr_boost_cool_down - delta, 0)
 
 
 func rand_array(array):
@@ -152,3 +182,7 @@ func rand_array(array):
 		
 		if x < cumulative_weight:
 			return t[1]
+
+
+func weighted_coin_flip(success_chance):
+	return rand_array([[success_chance, true], [1 - success_chance, false]])

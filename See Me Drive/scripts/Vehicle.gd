@@ -12,18 +12,19 @@ var collided = false
 
 
 func _ready():
-	if starts_behind:
-		pass # Handled in process.
-	elif wrong_direction:
-		linear_velocity = Vector2(0, speed)
-		rotation = PI
-	else:
-		linear_velocity = Vector2(0, -speed)
 	gravity_scale = 0
 	linear_damp = 0
 	contacts_reported = 1
 	contact_monitor = true
 	bounce = 1
+	if starts_behind:
+		pass # Handled in process.
+	elif wrong_direction:
+		linear_velocity = Vector2(0, speed)
+		rotation = PI
+		bounce = 0.5
+	else:
+		linear_velocity = Vector2(0, -speed)
 	
 	
 func _process(delta):

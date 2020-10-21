@@ -11,8 +11,9 @@ export var drive_towards_hold_pos = true
 export var vertical_speed_preserved_in_turn = 0.0 # float 0-1. 
 export var max_damage_outline = 4.0 # Width of damage outline
 export var outline_speed = 20 # Speed of outline
-export var collision_cool_down = 1
+export var collision_cool_down = 3
 export var speed_limit = 995
+export var boost_time = 1
 
 var direction = Vector2.UP
 var velocity = Vector2.UP
@@ -29,6 +30,7 @@ var on_road = true
 var time_since_vibrate = 0
 var reached_min_speed = 0
 var curr_collision_cool_down = 0
+var boost_left = 0
 
 onready var game = get_parent()
 onready var init_max_speed = max_speed
@@ -63,6 +65,9 @@ func _process(delta):
 		_damage_highlight(delta)
 	
 	_handle_off_road(delta)
+	
+	if boost_left > 0:
+		_apply_boost(delta)
 	
 	curr_collision_cool_down = max(curr_collision_cool_down - delta, 0)
 
@@ -115,6 +120,7 @@ func _on_collision(body):
 		_indicate_damage()
 		curr_collision_cool_down = collision_cool_down # Start cool down
 		game.new_collision()
+		_stop_boost()
 
 
 func _update_max_speed(delta):
@@ -171,10 +177,35 @@ func get_speed():
 # Called from Pause when the game is resumed.
 func wake_up():
 	player_sprite.material.set_shader_param("outline_color", Color.red)
-	
 
 
-func _on_collected_point(area):
+func _on_collected_item(area):
 	if area.is_in_group('star'):
 		_scoreboard.new_star(area)
 		area.queue_free()
+	elif area.is_in_group('boost'):
+		_boost()
+		area.queue_free()
+
+
+func _boost():
+	if not has_boost():
+		acceleration *= 10
+		max_speed /= 0.8
+	boost_left = boost_time
+
+
+func _stop_boost():
+	if has_boost():
+		acceleration /= 10
+	boost_left = 0
+	
+
+func _apply_boost(delta):
+	boost_left -= delta
+	if boost_left <= 0:
+		_stop_boost()
+
+
+func has_boost():
+	return boost_left > 0
