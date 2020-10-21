@@ -8,7 +8,7 @@ export var expected_max_speed = 600
 export var expected_collision_interval = 30
 export var star_spawn_distance = 1000
 
-const x_lanes = [140, 208, 280, 358]
+const x_lanes = [132, 203, 278, 350]
 
 onready var player = find_node("Player")
 onready var background = find_node("Road").get_child(0).get_child(0).get_child(0).material
