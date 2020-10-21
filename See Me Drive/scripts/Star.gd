@@ -9,9 +9,12 @@ var min_outline = 10
 var curr_outline = min_outline
 var outline_speed = 15
 var outline_dir = 1
+var color
 
 func _ready():
-	modulate = _speedometer.get_color(max(_player.get_speed(), 200))
+	color = _speedometer.get_color(max(_player.get_speed(), 200))
+	modulate = color
+	
 	
 func _process(delta):
 	rotate(PI / 2 *delta)

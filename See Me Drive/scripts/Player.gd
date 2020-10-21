@@ -35,6 +35,7 @@ onready var init_max_speed = max_speed
 onready var player_sprite = get_child(1)
 onready var left_boundary = get_owner().find_node('Road').get_child(1).position.x
 onready var right_boundary = get_owner().find_node('Road').get_child(2).position.x
+onready var _scoreboard = get_node('/root/Game/Scoreboard')
 
 
 func _ready():
@@ -175,4 +176,5 @@ func wake_up():
 
 func _on_collected_point(area):
 	if area.is_in_group('star'):
+		_scoreboard.new_star(area)
 		area.queue_free()
