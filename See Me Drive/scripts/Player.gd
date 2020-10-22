@@ -3,6 +3,7 @@ extends KinematicBody2D
 export var max_speed = 300.0
 export var min_speed = 100.0
 export var acceleration = 50
+export var boost_acceleration = 200
 export var max_speed_acceleration = 5 # Pixels per second
 export var handling = 1.0/50 # Factor for how fast the car can turn.
 export var off_road_break = -50 # Speed loss / sec off road
@@ -11,7 +12,7 @@ export var drive_towards_hold_pos = true
 export var vertical_speed_preserved_in_turn = 0.0 # float 0-1. 
 export var max_damage_outline = 4.0 # Width of damage outline
 export var outline_speed = 20 # Speed of outline
-export var collision_cool_down = 3
+export var collision_cool_down = 2
 export var speed_limit = 995
 export var boost_time = 1
 
@@ -116,10 +117,10 @@ func _on_collision(body):
 		if curr_collision_cool_down == 0:
 			speed *= 0.5
 			max_speed *= 0.8
+			game.new_collision()
+			curr_collision_cool_down = collision_cool_down # Start cool down
 		outline_dir = 1
 		_indicate_damage()
-		curr_collision_cool_down = collision_cool_down # Start cool down
-		game.new_collision()
 		_stop_boost()
 
 
@@ -190,14 +191,14 @@ func _on_collected_item(area):
 
 func _boost():
 	if not has_boost():
-		acceleration *= 10
+		acceleration = boost_acceleration
 		max_speed /= 0.8
 	boost_left = boost_time
 
 
 func _stop_boost():
 	if has_boost():
-		acceleration /= 10
+		acceleration = init_acceleration
 	boost_left = 0
 	
 
