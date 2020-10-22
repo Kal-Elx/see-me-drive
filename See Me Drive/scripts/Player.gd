@@ -36,6 +36,7 @@ var boost_left = 0
 onready var game = get_parent()
 onready var init_max_speed = max_speed
 onready var player_sprite = get_child(1)
+onready var collision_sound = get_child(3)
 onready var left_boundary = get_owner().find_node('Road').get_child(1).position.x
 onready var right_boundary = get_owner().find_node('Road').get_child(2).position.x
 onready var _scoreboard = get_node('/root/Game/Scoreboard')
@@ -136,6 +137,7 @@ func _update_max_speed(delta):
 
 func _indicate_damage():
 	Input.vibrate_handheld(200) # Vibrate phone
+	collision_sound.play()
 	taking_damage = true # Will highlight the player
 	
 
