@@ -16,7 +16,7 @@ func set_color(color):
 	
 func set_count(x):
 	count = x
-	label.text = str(count)
+	label.text = str(count) if count < 1000 else "%.1fk" % (count / 1000.0)
 
 
 func increment():
