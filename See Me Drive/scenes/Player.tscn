@@ -41,10 +41,9 @@ volume_db = -10.0
 
 [node name="StarSoundEffect" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 5 )
-volume_db = 5.0
 
 [node name="BoostSoundEffect" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 6 )
-volume_db = 5.0
+volume_db = -8.0
 [connection signal="area_entered" from="Area2D" to="." method="_on_collected_item"]
 [connection signal="body_entered" from="Area2D" to="." method="_on_collision"]
