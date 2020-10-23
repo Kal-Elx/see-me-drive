@@ -6,9 +6,12 @@ export var starts_behind = false
 export var wrong_direction = false
 
 onready var player = get_node("/root/Game/Player")
+onready var camera = get_node("/root/Game/Player/Camera2D")
+onready var sound = get_child(2)
 
 var screen_height = ProjectSettings.get_setting("display/window/size/height")
 var collided = false
+var init_volume
 
 
 func _ready():
@@ -25,6 +28,9 @@ func _ready():
 		bounce = 0.5
 	else:
 		linear_velocity = Vector2(0, -speed)
+		
+	if sound != null:
+		init_volume = sound.volume_db
 	
 	
 func _process(delta):
@@ -35,6 +41,11 @@ func _process(delta):
 		
 	if starts_behind and not collided:
 		linear_velocity = Vector2(0, -(player.max_speed + speed))
+		
+	if sound != null:
+		var volume_factor = (player.position.y - position.y) / (screen_height/2 - camera.offset.y)
+		volume_factor = max(min(volume_factor, 1), 0)
+		sound.volume_db = init_volume - 20 * volume_factor
 
 
 func _break():
