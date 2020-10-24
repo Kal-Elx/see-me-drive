@@ -1,5 +1,9 @@
 # See Me Drive
-See Me Drive is a mobile 2D driving game.
+See Me Drive is a 2D mobile driving game available at [Google Play](https://play.google.com/store/apps/details?id=se.kalelx.seemedrive).
+
+The game was developed for the course [Design and Programming of Computer Games](https://www.ida.liu.se/~TDDD23/) given at Linköping University.
+
+My goal with See Me Drive was to create a game which was enjoyable for everyone regardless of previous experience and physical abilities. 
 
 ## Assets
 - [Free Top Down Car Sprites by Unlucky Studio](https://opengameart.org/content/free-top-down-car-sprites-by-unlucky-studio)
